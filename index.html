@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Federal Register & Regulations Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0c0e12;
+    --bg-secondary: #13161c;
+    --bg-card: #181c24;
+    --bg-card-hover: #1e2330;
+    --border: #262d3a;
+    --border-accent: #2e3748;
+    --text-primary: #e8ecf2;
+    --text-secondary: #8b95a8;
+    --text-tertiary: #5a6478;
+    --accent-red: #e84545;
+    --accent-red-dim: rgba(232, 69, 69, 0.12);
+    --accent-amber: #f0a830;
+    --accent-amber-dim: rgba(240, 168, 48, 0.10);
+    --accent-green: #34c77b;
+    --accent-green-dim: rgba(52, 199, 123, 0.10);
+    --accent-blue: #4d8cf5;
+    --accent-blue-dim: rgba(77, 140, 245, 0.10);
+    --accent-purple: #9b6dff;
+    --accent-purple-dim: rgba(155, 109, 255, 0.10);
+    --accent-cyan: #22d3ee;
+    --accent-cyan-dim: rgba(34, 211, 238, 0.08);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Newsreader', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12, 14, 18, 0.92);
+    backdrop-filter: blur(16px);
+  }
+
+  .header-inner {
+    max-width: 1680px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent-red), #ff6b3d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .logo-text strong {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .logo-text span {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pulse-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .pulse-dot.error { background: var(--accent-red); animation: none; }
+  .pulse-dot.loading { background: var(--accent-amber); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52, 199, 123, 0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(52, 199, 123, 0); }
+  }
+
+  .api-key-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .api-key-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  .refresh-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--accent-blue-dim);
+    border: 1px solid transparent;
+    color: var(--accent-blue);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .refresh-btn:hover { background: rgba(77, 140, 245, 0.2); }
+  .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    background: var(--bg-secondary);
+  }
+
+  .stats-inner {
+    max-width: 1680px;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .stat-item {
+    padding: 14px 24px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 160px;
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+  }
+
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--serif);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .stat-value .trend {
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 400;
+  }
+  .stat-value .trend.up { color: var(--accent-green); }
+  .stat-value .trend.down { color: var(--accent-red); }
+
+  /* ── MAIN GRID ── */
+  .main {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel.span-2 { grid-column: 1 / -1; }
+
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .panel-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .panel-icon.red { background: var(--accent-red-dim); color: var(--accent-red); }
+  .panel-icon.amber { background: var(--accent-amber-dim); color: var(--accent-amber); }
+  .panel-icon.blue { background: var(--accent-blue-dim); color: var(--accent-blue); }
+  .panel-icon.green { background: var(--accent-green-dim); color: var(--accent-green); }
+  .panel-icon.purple { background: var(--accent-purple-dim); color: var(--accent-purple); }
+  .panel-icon.cyan { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .panel-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 520px;
+  }
+
+  .panel-body.scrollable::-webkit-scrollbar { width: 4px; }
+  .panel-body.scrollable::-webkit-scrollbar-track { background: transparent; }
+  .panel-body.scrollable::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 2px; }
+
+  /* ── FEED ITEMS ── */
+  .feed-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: default;
+    transition: background 0.12s;
+    position: relative;
+  }
+  .feed-item:hover { background: var(--bg-card-hover); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item.new { border-left: 3px solid var(--accent-red); }
+
+  .feed-item-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .feed-item-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .feed-item-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.12s;
+  }
+  .feed-item-title a:hover { color: var(--accent-blue); }
+
+  .feed-item-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 3px;
+  }
+
+  .feed-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .tag.rule { background: var(--accent-red-dim); color: var(--accent-red); }
+  .tag.proposed { background: var(--accent-amber-dim); color: var(--accent-amber); }
+  .tag.notice { background: var(--accent-blue-dim); color: var(--accent-blue); }
+  .tag.presidential { background: var(--accent-purple-dim); color: var(--accent-purple); }
+  .tag.comment { background: var(--accent-green-dim); color: var(--accent-green); }
+  .tag.other { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+
+  .tag.agency {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  /* ── EMPTY / LOADING STATES ── */
+  .loading-state, .empty-state, .error-state {
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 13px;
+  }
+
+  .loading-state .spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 12px;
+  }
+
+  .error-state { color: var(--accent-red); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.visible { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 480px;
+    transform: translateY(10px);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.visible .modal { transform: translateY(0); }
+
+  .modal h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .modal p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .modal p a {
+    color: var(--accent-blue);
+    text-decoration: none;
+  }
+
+  .modal input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 1rem;
+  }
+  .modal input:focus { border-color: var(--accent-blue); }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  .modal-actions button {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    transition: all 0.12s;
+  }
+  .modal-actions button:hover { border-color: var(--text-tertiary); color: var(--text-primary); }
+  .modal-actions button.primary {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #fff;
+  }
+  .modal-actions button.primary:hover { background: #3a7ae8; }
+
+  /* ── INTERVAL SELECTOR ── */
+  .interval-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  .interval-selector select {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* ── TICKER BAR ── */
+  .ticker-bar {
+    background: var(--accent-red);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 11px;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 28px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-label {
+    background: rgba(0,0,0,0.25);
+    padding: 0 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .ticker-content {
+    display: inline-block;
+    animation: ticker 60s linear infinite;
+    padding-left: 100%;
+  }
+
+  .ticker-content span { padding: 0 3rem; }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .main { grid-template-columns: 1fr; }
+    .panel.span-2 { grid-column: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 0 1rem; }
+    .main { padding: 1rem; gap: 1rem; }
+    .stats-bar { padding: 0 1rem; }
+    .stat-item { padding: 10px 16px; min-width: 130px; }
+    .stat-value { font-size: 17px; }
+  }
+
+  /* ── SEARCH ── */
+  .search-bar {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 1.25rem 2rem 0;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.12s;
+  }
+  .search-input:focus { border-color: var(--accent-blue); }
+
+  .search-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent-blue);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.12s;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: #3a7ae8; }
+
+  .filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.12s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .filter-chip:hover { border-color: var(--text-tertiary); }
+  .filter-chip.active { background: var(--accent-blue-dim); border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  /* ── TIMESTAMP FOOTER ── */
+  .footer-bar {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-label">LIVE</div>
+  <div class="ticker-content" id="ticker">
+    <span>Loading latest regulatory activity...</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo-mark">FR</div>
+      <div class="logo-text">
+        <strong>Federal Regulations Monitor</strong>
+        <span>Regulations.gov + Federal Register</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="interval-selector">
+        <span>AUTO-REFRESH</span>
+        <select id="intervalSelect">
+          <option value="60000">1 min</option>
+          <option value="300000" selected>5 min</option>
+          <option value="600000">10 min</option>
+          <option value="0">Off</option>
+        </select>
+      </div>
+      <div class="pulse-indicator">
+        <div class="pulse-dot" id="statusDot"></div>
+        <span id="statusText">Connecting...</span>
+      </div>
+      <button class="api-key-btn" id="apiKeyBtn">API KEY</button>
+      <button class="refresh-btn" id="refreshBtn" title="Refresh now">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-label">FR Documents Today</div>
+      <div class="stat-value" id="statFRDocs">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Open for Comment</div>
+      <div class="stat-value" id="statOpenComment">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">New Comments (24h)</div>
+      <div class="stat-value" id="statComments">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Agencies Active</div>
+      <div class="stat-value" id="statAgencies">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Last Updated</div>
+      <div class="stat-value" id="statTime" style="font-size:14px;font-family:var(--mono);">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <input class="search-input" id="searchInput" type="text" placeholder="Search documents, comments, dockets... (e.g., EPA, immigration, healthcare)">
+  <button class="search-btn" id="searchBtn">Search</button>
+  <div class="filter-chips">
+    <button class="filter-chip active" data-filter="all">All</button>
+    <button class="filter-chip" data-filter="Rule">Rules</button>
+    <button class="filter-chip" data-filter="Proposed Rule">Proposed</button>
+    <button class="filter-chip" data-filter="Notice">Notices</button>
+    <button class="filter-chip" data-filter="Presidential Document">Presidential</button>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main">
+
+  <!-- FEDERAL REGISTER: LATEST FILINGS -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-icon red">📋</div>
+        <div>
+          <div class="panel-title">Federal Register — Latest Filings</div>
+          <div class="panel-meta">federalregister.gov — no key required</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body scrollable" id="feedFR">
+      <div class="loading-state"><div class="spinner"></div>Loading Federal Register...</div>
+    </div>
+  </div>
+
+  <!-- REGULATIONS.GOV: LATEST DOCUMENTS -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-icon amber">📄</div>
+        <div>
+          <div class="panel-title">Regulations.gov — Latest Documents</div>
+          <div class="panel-meta">api.regulations.gov/v4 — key required</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body scrollable" id="feedRegDocs">
+      <div class="loading-state"><div class="spinner"></div>Loading documents...</div>
+    </div>
+  </div>
+
+  <!-- REGULATIONS.GOV: LATEST COMMENTS -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-icon green">💬</div>
+        <div>
+          <div class="panel-title">Regulations.gov — Latest Public Comments</div>
+          <div class="panel-meta">Most recent public submissions</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body scrollable" id="feedRegComments">
+      <div class="loading-state"><div class="spinner"></div>Loading comments...</div>
+    </div>
+  </div>
+
+  <!-- OPEN FOR COMMENT -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-icon purple">🗳️</div>
+        <div>
+          <div class="panel-title">Open for Comment — Closing Soon</div>
+          <div class="panel-meta">Comment periods ending in next 7 days</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body scrollable" id="feedClosingSoon">
+      <div class="loading-state"><div class="spinner"></div>Loading...</div>
+    </div>
+  </div>
+
+  <!-- SEARCH RESULTS (hidden by default) -->
+  <div class="panel span-2" id="searchResultsPanel" style="display:none;">
+    <div class="panel-header">
+      <div class="panel-title-group">
+        <div class="panel-icon cyan">🔍</div>
+        <div>
+          <div class="panel-title">Search Results</div>
+          <div class="panel-meta" id="searchResultsMeta"></div>
+        </div>
+      </div>
+      <button class="api-key-btn" id="closeSearchBtn">✕ Close</button>
+    </div>
+    <div class="panel-body scrollable" id="feedSearch">
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer-bar">
+  <span>Data sources: api.regulations.gov/v4 &amp; federalregister.gov/api/v1 — DEMO_KEY has limited rate (40/hr). <a href="https://open.gsa.gov/api/regulationsgov/" target="_blank" style="color:var(--accent-blue);">Get a free key</a></span>
+  <span id="footerTimestamp"></span>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiKeyModal">
+  <div class="modal">
+    <h3>Regulations.gov API Key</h3>
+    <p>
+      The dashboard uses <code style="background:var(--bg-primary);padding:2px 6px;border-radius:3px;font-size:12px;">DEMO_KEY</code> by default (40 requests/hour).
+      For higher limits, get a free key from <a href="https://api.data.gov/signup/" target="_blank">api.data.gov/signup</a>.
+    </p>
+    <input type="text" id="apiKeyInput" placeholder="Enter your API key or leave blank for DEMO_KEY">
+    <div class="modal-actions">
+      <button id="modalCancel">Cancel</button>
+      <button class="primary" id="modalSave">Save Key</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── STATE ──
+  let API_KEY = localStorage.getItem('regs_api_key') || 'DEMO_KEY';
+  let refreshInterval = null;
+  let knownDocIds = new Set();
+  let knownCommentIds = new Set();
+  let isFirstLoad = true;
+  let activeFilter = 'all';
+
+  // ── ELEMENTS ──
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  // ── HELPERS ──
+  function fmtDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diff = now - d;
+    if (diff < 3600000) return Math.max(1, Math.floor(diff / 60000)) + 'm ago';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function fmtDateShort(dateStr) {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function escHtml(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function docTypeTag(type) {
+    const map = {
+      'Rule': 'rule', 'Proposed Rule': 'proposed',
+      'Notice': 'notice', 'Presidential Document': 'presidential',
+      'Supporting & Related Material': 'other', 'Other': 'other'
+    };
+    return `<span class="tag ${map[type] || 'other'}">${escHtml(type || 'Other')}</span>`;
+  }
+
+  function frTypeTag(type) {
+    const map = {
+      'RULE': ['rule','Final Rule'], 'PRORULE': ['proposed','Proposed Rule'],
+      'NOTICE': ['notice','Notice'], 'PRESDOCU': ['presidential','Presidential']
+    };
+    const [cls, label] = map[type] || ['other', type || 'Other'];
+    return `<span class="tag ${cls}">${escHtml(label)}</span>`;
+  }
+
+  function setStatus(state, text) {
+    const dot = $('#statusDot');
+    dot.className = 'pulse-dot ' + (state === 'ok' ? '' : state === 'error' ? 'error' : 'loading');
+    $('#statusText').textContent = text;
+  }
+
+  function setLoading(elId) {
+    document.getElementById(elId).innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading...</div>';
+  }
+
+  function setError(elId, msg) {
+    document.getElementById(elId).innerHTML = `<div class="error-state">${escHtml(msg)}</div>`;
+  }
+
+  function isEmpty(elId) {
+    document.getElementById(elId).innerHTML = '<div class="empty-state">No results found</div>';
+  }
+
+  // ── API: FEDERAL REGISTER (no key needed) ──
+  async function fetchFederalRegister() {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      // Fetch recent documents (last 3 days to ensure results)
+      const threeDaysAgo = new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0];
+      const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=25&order=newest&conditions[publication_date][gte]=${threeDaysAgo}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      return data;
+    } catch (e) {
+      console.error('FR API error:', e);
+      throw e;
+    }
+  }
+
+  async function fetchFROpenComment() {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const weekFromNow = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+      const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=20&order=newest&conditions[comment_date][lte]=${weekFromNow}&conditions[comment_date][gte]=${today}&conditions[accepting_comments_on_regulations_gov]=1`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return await resp.json();
+    } catch (e) {
+      console.error('FR Comment API error:', e);
+      throw e;
+    }
+  }
+
+  // ── API: REGULATIONS.GOV ──
+  async function fetchRegsGov(endpoint, params = {}) {
+    const url = new URL(`https://api.regulations.gov/v4/${endpoint}`);
+    for (const [k, v] of Object.entries(params)) {
+      url.searchParams.set(k, v);
+    }
+    url.searchParams.set('api_key', API_KEY);
+    const resp = await fetch(url.toString());
+    if (resp.status === 429) throw new Error('Rate limited — try adding your own API key');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
+  }
+
+  // ── RENDER: FEDERAL REGISTER ──
+  function renderFRFeed(data, elId) {
+    const el = document.getElementById(elId);
+    if (!data.results || !data.results.length) { isEmpty(elId); return; }
+
+    el.innerHTML = data.results.map(doc => {
+      const isNew = false; // FR doesn't have live "new" detection in the same way
+      return `
+        <div class="feed-item${isNew ? ' new' : ''}">
+          <div class="feed-item-top">
+            <div class="feed-item-title">
+              <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
+            </div>
+            <div class="feed-item-time">${fmtDate(doc.publication_date)}</div>
+          </div>
+          <div class="feed-item-meta">
+            ${frTypeTag(doc.type)}
+            ${doc.agencies && doc.agencies.length ? doc.agencies.slice(0,2).map(a => `<span class="tag agency">${escHtml(a.short_name || a.name || '').substring(0,20)}</span>`).join('') : ''}
+            ${doc.document_number ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(doc.document_number)}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderClosingSoon(data) {
+    const el = document.getElementById('feedClosingSoon');
+    if (!data.results || !data.results.length) { isEmpty('feedClosingSoon'); return; }
+
+    el.innerHTML = data.results.map(doc => {
+      const daysLeft = doc.comment_end_on
+        ? Math.max(0, Math.ceil((new Date(doc.comment_end_on) - new Date()) / 86400000))
+        : null;
+      const urgency = daysLeft !== null && daysLeft <= 2 ? 'color:var(--accent-red);font-weight:600;' : '';
+      return `
+        <div class="feed-item">
+          <div class="feed-item-top">
+            <div class="feed-item-title">
+              <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
+            </div>
+            <div class="feed-item-time" style="${urgency}">
+              ${daysLeft !== null ? (daysLeft === 0 ? 'CLOSES TODAY' : daysLeft + 'd left') : '—'}
+            </div>
+          </div>
+          <div class="feed-item-meta">
+            ${frTypeTag(doc.type)}
+            ${doc.agencies && doc.agencies.length ? `<span class="tag agency">${escHtml((doc.agencies[0].short_name || doc.agencies[0].name || '').substring(0,20))}</span>` : ''}
+            ${doc.comment_end_on ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">Closes ${fmtDateShort(doc.comment_end_on)}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── RENDER: REGULATIONS.GOV ──
+  function renderRegsDocs(data) {
+    const el = document.getElementById('feedRegDocs');
+    if (!data.data || !data.data.length) { isEmpty('feedRegDocs'); return; }
+
+    el.innerHTML = data.data.map(doc => {
+      const a = doc.attributes;
+      const isNew = !isFirstLoad && !knownDocIds.has(doc.id);
+      knownDocIds.add(doc.id);
+      const regUrl = `https://www.regulations.gov/document/${doc.id}`;
+      return `
+        <div class="feed-item${isNew ? ' new' : ''}">
+          <div class="feed-item-top">
+            <div class="feed-item-title">
+              <a href="${regUrl}" target="_blank" rel="noopener">${escHtml(a.title)}</a>
+            </div>
+            <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
+          </div>
+          <div class="feed-item-meta">
+            ${docTypeTag(a.documentType)}
+            <span class="tag agency">${escHtml(a.agencyId || '')}</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(doc.id)}</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderRegsComments(data) {
+    const el = document.getElementById('feedRegComments');
+    if (!data.data || !data.data.length) { isEmpty('feedRegComments'); return; }
+
+    el.innerHTML = data.data.map(doc => {
+      const a = doc.attributes;
+      const isNew = !isFirstLoad && !knownCommentIds.has(doc.id);
+      knownCommentIds.add(doc.id);
+      const regUrl = `https://www.regulations.gov/comment/${doc.id}`;
+      return `
+        <div class="feed-item${isNew ? ' new' : ''}">
+          <div class="feed-item-top">
+            <div class="feed-item-title">
+              <a href="${regUrl}" target="_blank" rel="noopener">${escHtml(a.title || doc.id)}</a>
+            </div>
+            <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
+          </div>
+          <div class="feed-item-meta">
+            <span class="tag comment">Comment</span>
+            <span class="tag agency">${escHtml(a.agencyId || '')}</span>
+            ${a.organization ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(a.organization.substring(0,40))}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── SEARCH ──
+  async function doSearch(term) {
+    const panel = $('#searchResultsPanel');
+    panel.style.display = '';
+    setLoading('feedSearch');
+    $('#searchResultsMeta').textContent = `Searching for "${term}"...`;
+
+    try {
+      // Search both APIs in parallel
+      const [frData, regsData] = await Promise.allSettled([
+        fetch(`https://www.federalregister.gov/api/v1/documents.json?per_page=15&order=relevance&conditions[term]=${encodeURIComponent(term)}`).then(r => r.json()),
+        fetchRegsGov('documents', { 'filter[searchTerm]': term, 'page[size]': '15', sort: '-postedDate' })
+      ]);
+
+      let html = '';
+      let total = 0;
+
+      // FR results
+      if (frData.status === 'fulfilled' && frData.value.results) {
+        const filtered = activeFilter === 'all'
+          ? frData.value.results
+          : frData.value.results.filter(d => {
+              const typeMap = { 'Rule': 'RULE', 'Proposed Rule': 'PRORULE', 'Notice': 'NOTICE', 'Presidential Document': 'PRESDOCU' };
+              return d.type === Object.entries(typeMap).find(([k,v]) => k === activeFilter)?.[1]
+                || d.type === activeFilter;
+            });
+        total += filtered.length;
+        html += filtered.map(doc => `
+          <div class="feed-item">
+            <div class="feed-item-top">
+              <div class="feed-item-title">
+                <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
+              </div>
+              <div class="feed-item-time">${fmtDate(doc.publication_date)}</div>
+            </div>
+            <div class="feed-item-meta">
+              ${frTypeTag(doc.type)}
+              <span class="tag agency">Federal Register</span>
+              ${doc.agencies && doc.agencies.length ? `<span class="tag agency">${escHtml((doc.agencies[0].short_name || doc.agencies[0].name || '').substring(0,20))}</span>` : ''}
+            </div>
+          </div>`).join('');
+      }
+
+      // Regs.gov results
+      if (regsData.status === 'fulfilled' && regsData.value.data) {
+        const filtered = activeFilter === 'all'
+          ? regsData.value.data
+          : regsData.value.data.filter(d => d.attributes.documentType === activeFilter);
+        total += filtered.length;
+        html += filtered.map(doc => {
+          const a = doc.attributes;
+          return `
+            <div class="feed-item">
+              <div class="feed-item-top">
+                <div class="feed-item-title">
+                  <a href="https://www.regulations.gov/document/${doc.id}" target="_blank" rel="noopener">${escHtml(a.title)}</a>
+                </div>
+                <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
+              </div>
+              <div class="feed-item-meta">
+                ${docTypeTag(a.documentType)}
+                <span class="tag agency">Regulations.gov</span>
+                <span class="tag agency">${escHtml(a.agencyId || '')}</span>
+              </div>
+            </div>`;
+        }).join('');
+      }
+
+      $('#searchResultsMeta').textContent = `${total} results for "${term}"`;
+      $('#feedSearch').innerHTML = html || '<div class="empty-state">No results found</div>';
+    } catch (e) {
+      setError('feedSearch', 'Search failed: ' + e.message);
+    }
+  }
+
+  // ── UPDATE TICKER ──
+  function updateTicker(frData) {
+    if (!frData || !frData.results || !frData.results.length) return;
+    const items = frData.results.slice(0, 8);
+    const tickerHtml = items.map(d => {
+      const agency = d.agencies && d.agencies[0] ? (d.agencies[0].short_name || d.agencies[0].name) : '';
+      return `<span>${agency ? agency + ': ' : ''}${(d.title || '').substring(0, 100)}</span>`;
+    }).join('');
+    // Duplicate for seamless loop
+    $('#ticker').innerHTML = tickerHtml + tickerHtml;
+  }
+
+  // ── MAIN FETCH ──
+  async function fetchAll() {
+    const btn = $('#refreshBtn');
+    btn.classList.add('spinning');
+    setStatus('loading', 'Fetching...');
+
+    let errors = 0;
+    let frData = null;
+
+    // Federal Register (always works, no key)
+    try {
+      frData = await fetchFederalRegister();
+      renderFRFeed(frData, 'feedFR');
+      updateTicker(frData);
+      const todayCount = frData.results ? frData.results.filter(d => {
+        const pub = new Date(d.publication_date).toDateString();
+        return pub === new Date().toDateString();
+      }).length : 0;
+      $('#statFRDocs').innerHTML = todayCount.toLocaleString();
+      const agencies = new Set();
+      if (frData.results) frData.results.forEach(d => {
+        if (d.agencies) d.agencies.forEach(a => agencies.add(a.short_name || a.name));
+      });
+      $('#statAgencies').innerHTML = agencies.size.toString();
+    } catch (e) {
+      errors++;
+      setError('feedFR', 'Failed to load Federal Register data');
+    }
+
+    // FR: Open for Comment
+    try {
+      const openData = await fetchFROpenComment();
+      renderClosingSoon(openData);
+      $('#statOpenComment').innerHTML = openData.count ? openData.count.toLocaleString() : (openData.results ? openData.results.length.toString() : '—');
+    } catch (e) {
+      errors++;
+      setError('feedClosingSoon', 'Failed to load');
+    }
+
+    // Regulations.gov Documents
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const threeDaysAgo = new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0];
+      const regsData = await fetchRegsGov('documents', {
+        sort: '-postedDate',
+        'page[size]': '25',
+        'filter[postedDate][ge]': threeDaysAgo
+      });
+      renderRegsDocs(regsData);
+    } catch (e) {
+      errors++;
+      setError('feedRegDocs', e.message.includes('Rate limited') ? 'Rate limited — add your own API key' : 'Failed: ' + e.message);
+    }
+
+    // Regulations.gov Comments
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+      const commData = await fetchRegsGov('comments', {
+        sort: '-postedDate',
+        'page[size]': '25',
+        'filter[postedDate][ge]': yesterday
+      });
+      renderRegsComments(commData);
+      const totalComments = commData.meta ? commData.meta.totalElements : (commData.data ? commData.data.length : 0);
+      $('#statComments').innerHTML = totalComments ? totalComments.toLocaleString() : '—';
+    } catch (e) {
+      errors++;
+      setError('feedRegComments', e.message.includes('Rate limited') ? 'Rate limited — add your own API key' : 'Failed: ' + e.message);
+    }
+
+    // Status
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    $('#statTime').textContent = timeStr;
+    $('#footerTimestamp').textContent = 'Last fetch: ' + now.toLocaleString();
+
+    if (errors === 0) setStatus('ok', 'Live — ' + timeStr);
+    else if (errors < 4) setStatus('loading', 'Partial — ' + errors + ' error(s)');
+    else setStatus('error', 'Errors — check API key');
+
+    isFirstLoad = false;
+    btn.classList.remove('spinning');
+  }
+
+  // ── INTERVAL MANAGEMENT ──
+  function startInterval() {
+    if (refreshInterval) clearInterval(refreshInterval);
+    const ms = parseInt($('#intervalSelect').value);
+    if (ms > 0) {
+      refreshInterval = setInterval(fetchAll, ms);
+    }
+  }
+
+  // ── EVENT HANDLERS ──
+  $('#intervalSelect').addEventListener('change', startInterval);
+
+  $('#refreshBtn').addEventListener('click', fetchAll);
+
+  $('#apiKeyBtn').addEventListener('click', () => {
+    $('#apiKeyInput').value = API_KEY === 'DEMO_KEY' ? '' : API_KEY;
+    $('#apiKeyModal').classList.add('visible');
+  });
+
+  $('#modalCancel').addEventListener('click', () => {
+    $('#apiKeyModal').classList.remove('visible');
+  });
+
+  $('#modalSave').addEventListener('click', () => {
+    const key = $('#apiKeyInput').value.trim();
+    API_KEY = key || 'DEMO_KEY';
+    localStorage.setItem('regs_api_key', API_KEY);
+    $('#apiKeyModal').classList.remove('visible');
+    fetchAll();
+  });
+
+  $('#apiKeyModal').addEventListener('click', (e) => {
+    if (e.target === $('#apiKeyModal')) $('#apiKeyModal').classList.remove('visible');
+  });
+
+  $('#searchBtn').addEventListener('click', () => {
+    const term = $('#searchInput').value.trim();
+    if (term) doSearch(term);
+  });
+
+  $('#searchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const term = $('#searchInput').value.trim();
+      if (term) doSearch(term);
+    }
+  });
+
+  $('#closeSearchBtn').addEventListener('click', () => {
+    $('#searchResultsPanel').style.display = 'none';
+  });
+
+  // Filter chips
+  $$('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      $$('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeFilter = chip.dataset.filter;
+      // Re-run search if search panel is open
+      const term = $('#searchInput').value.trim();
+      if (term && $('#searchResultsPanel').style.display !== 'none') {
+        doSearch(term);
+      }
+    });
+  });
+
+  // ── INIT ──
+  fetchAll();
+  startInterval();
+
+})();
+</script>
+</body>
+</html>
