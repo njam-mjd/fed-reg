@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Federal Register & Regulations Monitor</title>
+<title>Environmental Regulations Monitor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -28,6 +28,8 @@
     --accent-purple-dim: rgba(155, 109, 255, 0.10);
     --accent-cyan: #22d3ee;
     --accent-cyan-dim: rgba(34, 211, 238, 0.08);
+    --accent-teal: #2dd4a8;
+    --accent-teal-dim: rgba(45, 212, 168, 0.10);
     --mono: 'DM Mono', monospace;
     --serif: 'Newsreader', Georgia, serif;
     --sans: 'DM Sans', system-ui, sans-serif;
@@ -73,13 +75,13 @@
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--accent-red), #ff6b3d);
+    background: linear-gradient(135deg, #1a8a5c, #2dd4a8);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--serif);
     font-weight: 700;
-    font-size: 18px;
+    font-size: 16px;
     color: #fff;
     flex-shrink: 0;
   }
@@ -146,14 +148,14 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-  .api-key-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .api-key-btn:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
 
   .refresh-btn {
     font-family: var(--mono);
     font-size: 11px;
-    background: var(--accent-blue-dim);
+    background: var(--accent-teal-dim);
     border: 1px solid transparent;
-    color: var(--accent-blue);
+    color: var(--accent-teal);
     padding: 6px 14px;
     border-radius: 6px;
     cursor: pointer;
@@ -162,9 +164,24 @@
     align-items: center;
     gap: 6px;
   }
-  .refresh-btn:hover { background: rgba(77, 140, 245, 0.2); }
+  .refresh-btn:hover { background: rgba(45, 212, 168, 0.2); }
   .refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  .scope-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-teal);
+    background: var(--accent-teal-dim);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(45, 212, 168, 0.2);
+  }
 
   /* ── STATS BAR ── */
   .stats-bar {
@@ -209,14 +226,6 @@
     gap: 6px;
   }
 
-  .stat-value .trend {
-    font-size: 11px;
-    font-family: var(--mono);
-    font-weight: 400;
-  }
-  .stat-value .trend.up { color: var(--accent-green); }
-  .stat-value .trend.down { color: var(--accent-red); }
-
   /* ── MAIN GRID ── */
   .main {
     max-width: 1680px;
@@ -227,7 +236,6 @@
     gap: 1.5rem;
   }
 
-  /* ── PANEL ── */
   .panel {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -271,12 +279,9 @@
   .panel-icon.green { background: var(--accent-green-dim); color: var(--accent-green); }
   .panel-icon.purple { background: var(--accent-purple-dim); color: var(--accent-purple); }
   .panel-icon.cyan { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+  .panel-icon.teal { background: var(--accent-teal-dim); color: var(--accent-teal); }
 
-  .panel-title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
+  .panel-title { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
 
   .panel-meta {
     font-family: var(--mono);
@@ -286,12 +291,7 @@
     letter-spacing: 0.06em;
   }
 
-  .panel-body {
-    flex: 1;
-    overflow-y: auto;
-    max-height: 520px;
-  }
-
+  .panel-body { flex: 1; overflow-y: auto; max-height: 520px; }
   .panel-body.scrollable::-webkit-scrollbar { width: 4px; }
   .panel-body.scrollable::-webkit-scrollbar-track { background: transparent; }
   .panel-body.scrollable::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 2px; }
@@ -306,7 +306,7 @@
   }
   .feed-item:hover { background: var(--bg-card-hover); }
   .feed-item:last-child { border-bottom: none; }
-  .feed-item.new { border-left: 3px solid var(--accent-red); }
+  .feed-item.new { border-left: 3px solid var(--accent-teal); }
 
   .feed-item-top {
     display: flex;
@@ -329,12 +329,8 @@
     overflow: hidden;
   }
 
-  .feed-item-title a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.12s;
-  }
-  .feed-item-title a:hover { color: var(--accent-blue); }
+  .feed-item-title a { color: inherit; text-decoration: none; transition: color 0.12s; }
+  .feed-item-title a:hover { color: var(--accent-teal); }
 
   .feed-item-time {
     font-family: var(--mono);
@@ -345,12 +341,7 @@
     padding-top: 3px;
   }
 
-  .feed-item-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .feed-item-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
   .tag {
     font-family: var(--mono);
@@ -367,287 +358,124 @@
   .tag.presidential { background: var(--accent-purple-dim); color: var(--accent-purple); }
   .tag.comment { background: var(--accent-green-dim); color: var(--accent-green); }
   .tag.other { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+  .tag.agency { background: rgba(255,255,255,0.04); color: var(--text-secondary); border: 1px solid var(--border); }
+  .tag.env { background: var(--accent-teal-dim); color: var(--accent-teal); border: 1px solid rgba(45,212,168,0.2); }
 
-  .tag.agency {
-    background: rgba(255,255,255,0.04);
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
-  }
-
-  /* ── EMPTY / LOADING STATES ── */
   .loading-state, .empty-state, .error-state {
-    padding: 3rem 2rem;
-    text-align: center;
-    color: var(--text-tertiary);
-    font-size: 13px;
+    padding: 3rem 2rem; text-align: center; color: var(--text-tertiary); font-size: 13px;
   }
 
   .loading-state .spinner {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent-blue);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto 12px;
+    width: 24px; height: 24px; border: 2px solid var(--border);
+    border-top-color: var(--accent-teal); border-radius: 50%;
+    animation: spin 0.7s linear infinite; margin: 0 auto 12px;
   }
 
   .error-state { color: var(--accent-red); }
 
   /* ── MODAL ── */
   .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+    z-index: 500; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
   }
   .modal-overlay.visible { opacity: 1; pointer-events: all; }
 
   .modal {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2rem;
-    width: 90%;
-    max-width: 480px;
-    transform: translateY(10px);
-    transition: transform 0.2s;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 2rem; width: 90%; max-width: 480px;
+    transform: translateY(10px); transition: transform 0.2s;
   }
   .modal-overlay.visible .modal { transform: translateY(0); }
-
-  .modal h3 {
-    font-size: 16px;
-    margin-bottom: 6px;
-  }
-
-  .modal p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
-  }
-
-  .modal p a {
-    color: var(--accent-blue);
-    text-decoration: none;
-  }
-
+  .modal h3 { font-size: 16px; margin-bottom: 6px; }
+  .modal p { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6; }
+  .modal p a { color: var(--accent-teal); text-decoration: none; }
   .modal input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: var(--mono);
-    font-size: 13px;
-    outline: none;
-    margin-bottom: 1rem;
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg-primary); color: var(--text-primary); font-family: var(--mono);
+    font-size: 13px; outline: none; margin-bottom: 1rem;
   }
-  .modal input:focus { border-color: var(--accent-blue); }
-
-  .modal-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-  }
-
+  .modal input:focus { border-color: var(--accent-teal); }
+  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
   .modal-actions button {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    transition: all 0.12s;
+    font-family: var(--sans); font-size: 13px; font-weight: 500; padding: 8px 20px;
+    border-radius: 8px; cursor: pointer; border: 1px solid var(--border);
+    background: var(--bg-secondary); color: var(--text-secondary); transition: all 0.12s;
   }
   .modal-actions button:hover { border-color: var(--text-tertiary); color: var(--text-primary); }
-  .modal-actions button.primary {
-    background: var(--accent-blue);
-    border-color: var(--accent-blue);
-    color: #fff;
-  }
-  .modal-actions button.primary:hover { background: #3a7ae8; }
+  .modal-actions button.primary { background: var(--accent-teal); border-color: var(--accent-teal); color: #fff; }
+  .modal-actions button.primary:hover { background: #22b893; }
 
-  /* ── INTERVAL SELECTOR ── */
   .interval-selector {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-tertiary);
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 10px; color: var(--text-tertiary);
   }
-
   .interval-selector select {
-    font-family: var(--mono);
-    font-size: 11px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    padding: 4px 8px;
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
+    font-family: var(--mono); font-size: 11px; background: var(--bg-primary);
+    border: 1px solid var(--border); color: var(--text-secondary);
+    padding: 4px 8px; border-radius: 4px; outline: none; cursor: pointer;
   }
 
-  /* ── TICKER BAR ── */
-  .ticker-bar {
-    background: var(--accent-red);
-    color: #fff;
-    font-family: var(--mono);
-    font-size: 11px;
-    overflow: hidden;
-    white-space: nowrap;
-    height: 28px;
-    display: flex;
-    align-items: center;
+  .search-bar {
+    max-width: 1680px; margin: 0 auto; padding: 1.25rem 2rem 0;
+    display: flex; gap: 0.75rem; align-items: center;
+  }
+  .search-input {
+    flex: 1; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg-card); color: var(--text-primary); font-family: var(--sans);
+    font-size: 13px; outline: none; transition: border-color 0.12s;
+  }
+  .search-input:focus { border-color: var(--accent-teal); }
+  .search-btn {
+    font-family: var(--sans); font-size: 13px; font-weight: 600; padding: 10px 20px;
+    border-radius: 8px; border: none; background: var(--accent-teal); color: #fff;
+    cursor: pointer; transition: background 0.12s; white-space: nowrap;
+  }
+  .search-btn:hover { background: #22b893; }
+
+  .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-chip {
+    font-family: var(--mono); font-size: 10px; padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border); background: transparent; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .filter-chip:hover { border-color: var(--text-tertiary); }
+  .filter-chip.active { background: var(--accent-teal-dim); border-color: var(--accent-teal); color: var(--accent-teal); }
+
+  .footer-bar {
+    max-width: 1680px; margin: 0 auto; padding: 0 2rem 2rem;
+    font-family: var(--mono); font-size: 10px; color: var(--text-tertiary);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   }
 
-  .ticker-label {
-    background: rgba(0,0,0,0.25);
-    padding: 0 12px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .ticker-content {
-    display: inline-block;
-    animation: ticker 60s linear infinite;
-    padding-left: 100%;
-  }
-
-  .ticker-content span { padding: 0 3rem; }
-
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
-  }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 1100px) {
     .main { grid-template-columns: 1fr; }
     .panel.span-2 { grid-column: 1; }
   }
-
   @media (max-width: 640px) {
     .header { padding: 0 1rem; }
     .main { padding: 1rem; gap: 1rem; }
     .stats-bar { padding: 0 1rem; }
     .stat-item { padding: 10px 16px; min-width: 130px; }
     .stat-value { font-size: 17px; }
-  }
-
-  /* ── SEARCH ── */
-  .search-bar {
-    max-width: 1680px;
-    margin: 0 auto;
-    padding: 1.25rem 2rem 0;
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-  }
-
-  .search-input {
-    flex: 1;
-    padding: 10px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--text-primary);
-    font-family: var(--sans);
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.12s;
-  }
-  .search-input:focus { border-color: var(--accent-blue); }
-
-  .search-btn {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent-blue);
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.12s;
-    white-space: nowrap;
-  }
-  .search-btn:hover { background: #3a7ae8; }
-
-  .filter-chips {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .filter-chip {
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.12s;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .filter-chip:hover { border-color: var(--text-tertiary); }
-  .filter-chip.active { background: var(--accent-blue-dim); border-color: var(--accent-blue); color: var(--accent-blue); }
-
-  /* ── TIMESTAMP FOOTER ── */
-  .footer-bar {
-    max-width: 1680px;
-    margin: 0 auto;
-    padding: 0 2rem 2rem;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-tertiary);
-    display: flex;
-    justify-content: space-between;
+    .search-bar { padding: 1rem 1rem 0; flex-wrap: wrap; }
   }
 </style>
 </head>
 <body>
 
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-label">LIVE</div>
-  <div class="ticker-content" id="ticker">
-    <span>Loading latest regulatory activity...</span>
-  </div>
-</div>
-
 <!-- HEADER -->
 <header class="header">
   <div class="header-inner">
     <div class="header-left">
-      <div class="logo-mark">FR</div>
+      <div class="logo-mark">EN</div>
       <div class="logo-text">
-        <strong>Federal Regulations Monitor</strong>
-        <span>Regulations.gov + Federal Register</span>
+        <strong>Environmental Regulations Monitor</strong>
+        <span>EPA · DOI · NOAA · FWS · CEQ · Corps</span>
       </div>
     </div>
     <div class="header-right">
+      <div class="scope-badge">🌿 Environmental Only</div>
       <div class="interval-selector">
         <span>AUTO-REFRESH</span>
         <select id="intervalSelect">
@@ -674,7 +502,7 @@
 <div class="stats-bar">
   <div class="stats-inner">
     <div class="stat-item">
-      <div class="stat-label">FR Documents Today</div>
+      <div class="stat-label">Env. Filings (7d)</div>
       <div class="stat-value" id="statFRDocs">—</div>
     </div>
     <div class="stat-item">
@@ -682,7 +510,7 @@
       <div class="stat-value" id="statOpenComment">—</div>
     </div>
     <div class="stat-item">
-      <div class="stat-label">New Comments (24h)</div>
+      <div class="stat-label">EPA Comments (24h)</div>
       <div class="stat-value" id="statComments">—</div>
     </div>
     <div class="stat-item">
@@ -698,44 +526,40 @@
 
 <!-- SEARCH -->
 <div class="search-bar">
-  <input class="search-input" id="searchInput" type="text" placeholder="Search documents, comments, dockets... (e.g., EPA, immigration, healthcare)">
+  <input class="search-input" id="searchInput" type="text" placeholder="Search environmental regulations... (e.g., PFAS, Clean Water Act, emissions, wetlands)">
   <button class="search-btn" id="searchBtn">Search</button>
   <div class="filter-chips">
     <button class="filter-chip active" data-filter="all">All</button>
     <button class="filter-chip" data-filter="Rule">Rules</button>
     <button class="filter-chip" data-filter="Proposed Rule">Proposed</button>
     <button class="filter-chip" data-filter="Notice">Notices</button>
-    <button class="filter-chip" data-filter="Presidential Document">Presidential</button>
   </div>
 </div>
 
 <!-- MAIN GRID -->
 <div class="main">
-
-  <!-- FEDERAL REGISTER: LATEST FILINGS -->
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title-group">
-        <div class="panel-icon red">📋</div>
+        <div class="panel-icon teal">📋</div>
         <div>
-          <div class="panel-title">Federal Register — Latest Filings</div>
-          <div class="panel-meta">federalregister.gov — no key required</div>
+          <div class="panel-title">Federal Register — Environmental Filings</div>
+          <div class="panel-meta">EPA, DOI, NOAA, FWS, CEQ, Army Corps</div>
         </div>
       </div>
     </div>
     <div class="panel-body scrollable" id="feedFR">
-      <div class="loading-state"><div class="spinner"></div>Loading Federal Register...</div>
+      <div class="loading-state"><div class="spinner"></div>Loading environmental filings...</div>
     </div>
   </div>
 
-  <!-- REGULATIONS.GOV: LATEST DOCUMENTS -->
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title-group">
-        <div class="panel-icon amber">📄</div>
+        <div class="panel-icon green">📄</div>
         <div>
-          <div class="panel-title">Regulations.gov — Latest Documents</div>
-          <div class="panel-meta">api.regulations.gov/v4 — key required</div>
+          <div class="panel-title">Regulations.gov — Environmental Documents</div>
+          <div class="panel-meta">EPA + environmental keyword search</div>
         </div>
       </div>
     </div>
@@ -744,14 +568,13 @@
     </div>
   </div>
 
-  <!-- REGULATIONS.GOV: LATEST COMMENTS -->
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title-group">
-        <div class="panel-icon green">💬</div>
+        <div class="panel-icon blue">💬</div>
         <div>
-          <div class="panel-title">Regulations.gov — Latest Public Comments</div>
-          <div class="panel-meta">Most recent public submissions</div>
+          <div class="panel-title">Latest Public Comments — EPA</div>
+          <div class="panel-meta">Recent submissions on EPA dockets</div>
         </div>
       </div>
     </div>
@@ -760,14 +583,13 @@
     </div>
   </div>
 
-  <!-- OPEN FOR COMMENT -->
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title-group">
-        <div class="panel-icon purple">🗳️</div>
+        <div class="panel-icon amber">🗳️</div>
         <div>
-          <div class="panel-title">Open for Comment — Closing Soon</div>
-          <div class="panel-meta">Comment periods ending in next 7 days</div>
+          <div class="panel-title">Comment Periods Closing Soon</div>
+          <div class="panel-meta">Environmental rules — closing within 7 days</div>
         </div>
       </div>
     </div>
@@ -776,7 +598,6 @@
     </div>
   </div>
 
-  <!-- SEARCH RESULTS (hidden by default) -->
   <div class="panel span-2" id="searchResultsPanel" style="display:none;">
     <div class="panel-header">
       <div class="panel-title-group">
@@ -788,15 +609,12 @@
       </div>
       <button class="api-key-btn" id="closeSearchBtn">✕ Close</button>
     </div>
-    <div class="panel-body scrollable" id="feedSearch">
-    </div>
+    <div class="panel-body scrollable" id="feedSearch"></div>
   </div>
-
 </div>
 
-<!-- FOOTER -->
 <div class="footer-bar">
-  <span>Data sources: api.regulations.gov/v4 &amp; federalregister.gov/api/v1 — DEMO_KEY has limited rate (40/hr). <a href="https://open.gsa.gov/api/regulationsgov/" target="_blank" style="color:var(--accent-blue);">Get a free key</a></span>
+  <span>Scoped to: EPA, DOI, NOAA, FWS, CEQ, USACE, NMFS, FS, BLM, NPS, BOEM — Sources: api.regulations.gov/v4 &amp; federalregister.gov/api/v1 — <a href="https://api.data.gov/signup/" target="_blank" style="color:var(--accent-teal);">Get a free API key</a></span>
   <span id="footerTimestamp"></span>
 </div>
 
@@ -818,7 +636,35 @@
 
 <script>
 (function() {
-  // ── STATE ──
+  // ═══════════════════════════════════════════════════════
+  // ENVIRONMENTAL AGENCY CONFIGURATION
+  // ═══════════════════════════════════════════════════════
+
+  // Federal Register API uses full agency slug strings
+  const FR_ENV_AGENCIES = [
+    'environmental-protection-agency',
+    'interior-department',
+    'fish-and-wildlife-service',
+    'national-oceanic-and-atmospheric-administration',
+    'council-on-environmental-quality',
+    'engineers-corps',
+    'national-marine-fisheries-service',
+    'forest-service',
+    'bureau-of-land-management',
+    'national-park-service',
+    'bureau-of-ocean-energy-management',
+    'pipeline-and-hazardous-materials-safety-administration'
+  ];
+
+  // Regulations.gov uses short agency IDs
+  const REGS_ENV_AGENCIES = new Set([
+    'EPA', 'DOI', 'FWS', 'NOAA', 'CEQ', 'USACE', 'NMFS',
+    'FS', 'BLM', 'NPS', 'BOEM', 'PHMSA'
+  ]);
+
+  // ═══════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════
   let API_KEY = localStorage.getItem('regs_api_key') || 'DEMO_KEY';
   let refreshInterval = null;
   let knownDocIds = new Set();
@@ -826,16 +672,16 @@
   let isFirstLoad = true;
   let activeFilter = 'all';
 
-  // ── ELEMENTS ──
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
 
-  // ── HELPERS ──
+  // ═══════════════════════════════════════════════════════
+  // HELPERS
+  // ═══════════════════════════════════════════════════════
   function fmtDate(dateStr) {
     if (!dateStr) return '—';
     const d = new Date(dateStr);
-    const now = new Date();
-    const diff = now - d;
+    const diff = Date.now() - d;
     if (diff < 3600000) return Math.max(1, Math.floor(diff / 60000)) + 'm ago';
     if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -846,84 +692,71 @@
     return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
-  function escHtml(s) {
+  function esc(s) {
     if (!s) return '';
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   function docTypeTag(type) {
-    const map = {
-      'Rule': 'rule', 'Proposed Rule': 'proposed',
-      'Notice': 'notice', 'Presidential Document': 'presidential',
-      'Supporting & Related Material': 'other', 'Other': 'other'
-    };
-    return `<span class="tag ${map[type] || 'other'}">${escHtml(type || 'Other')}</span>`;
+    const map = { 'Rule':'rule', 'Proposed Rule':'proposed', 'Notice':'notice',
+      'Presidential Document':'presidential', 'Supporting & Related Material':'other', 'Other':'other' };
+    return `<span class="tag ${map[type]||'other'}">${esc(type||'Other')}</span>`;
   }
 
   function frTypeTag(type) {
-    const map = {
-      'RULE': ['rule','Final Rule'], 'PRORULE': ['proposed','Proposed Rule'],
-      'NOTICE': ['notice','Notice'], 'PRESDOCU': ['presidential','Presidential']
-    };
-    const [cls, label] = map[type] || ['other', type || 'Other'];
-    return `<span class="tag ${cls}">${escHtml(label)}</span>`;
+    const map = { 'RULE':['rule','Final Rule'], 'PRORULE':['proposed','Proposed Rule'],
+      'NOTICE':['notice','Notice'], 'PRESDOCU':['presidential','Presidential'] };
+    const [cls,label] = map[type] || ['other', type||'Other'];
+    return `<span class="tag ${cls}">${esc(label)}</span>`;
+  }
+
+  function agencyTag(id) {
+    return REGS_ENV_AGENCIES.has(id)
+      ? `<span class="tag env">${esc(id)}</span>`
+      : `<span class="tag agency">${esc(id||'')}</span>`;
   }
 
   function setStatus(state, text) {
-    const dot = $('#statusDot');
-    dot.className = 'pulse-dot ' + (state === 'ok' ? '' : state === 'error' ? 'error' : 'loading');
+    $('#statusDot').className = 'pulse-dot ' + (state==='ok' ? '' : state==='error' ? 'error' : 'loading');
     $('#statusText').textContent = text;
   }
 
-  function setLoading(elId) {
-    document.getElementById(elId).innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading...</div>';
+  function setLoading(id) { document.getElementById(id).innerHTML = '<div class="loading-state"><div class="spinner"></div>Loading...</div>'; }
+  function setError(id, msg) { document.getElementById(id).innerHTML = `<div class="error-state">${esc(msg)}</div>`; }
+  function setEmpty(id) { document.getElementById(id).innerHTML = '<div class="empty-state">No results found</div>'; }
+
+  // ═══════════════════════════════════════════════════════
+  // API: FEDERAL REGISTER (no key needed)
+  // Scoped to environmental agencies
+  // ═══════════════════════════════════════════════════════
+  function buildFRAgencyParams() {
+    return FR_ENV_AGENCIES.map(a => `conditions[agencies][]=${a}`).join('&');
   }
 
-  function setError(elId, msg) {
-    document.getElementById(elId).innerHTML = `<div class="error-state">${escHtml(msg)}</div>`;
-  }
-
-  function isEmpty(elId) {
-    document.getElementById(elId).innerHTML = '<div class="empty-state">No results found</div>';
-  }
-
-  // ── API: FEDERAL REGISTER (no key needed) ──
   async function fetchFederalRegister() {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      // Fetch recent documents (last 3 days to ensure results)
-      const threeDaysAgo = new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0];
-      const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=25&order=newest&conditions[publication_date][gte]=${threeDaysAgo}`;
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      const data = await resp.json();
-      return data;
-    } catch (e) {
-      console.error('FR API error:', e);
-      throw e;
-    }
+    const sevenDaysAgo = new Date(Date.now() - 7*86400000).toISOString().split('T')[0];
+    const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=25&order=newest&conditions[publication_date][gte]=${sevenDaysAgo}&${buildFRAgencyParams()}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
   }
 
   async function fetchFROpenComment() {
-    try {
-      const today = new Date().toISOString().split('T')[0];
-      const weekFromNow = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
-      const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=20&order=newest&conditions[comment_date][lte]=${weekFromNow}&conditions[comment_date][gte]=${today}&conditions[accepting_comments_on_regulations_gov]=1`;
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      return await resp.json();
-    } catch (e) {
-      console.error('FR Comment API error:', e);
-      throw e;
-    }
+    const today = new Date().toISOString().split('T')[0];
+    const weekOut = new Date(Date.now() + 7*86400000).toISOString().split('T')[0];
+    const url = `https://www.federalregister.gov/api/v1/documents.json?per_page=20&order=newest&conditions[comment_date][lte]=${weekOut}&conditions[comment_date][gte]=${today}&conditions[accepting_comments_on_regulations_gov]=1&${buildFRAgencyParams()}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
   }
 
-  // ── API: REGULATIONS.GOV ──
+  // ═══════════════════════════════════════════════════════
+  // API: REGULATIONS.GOV (key required)
+  // Scoped to EPA + environmental keywords
+  // ═══════════════════════════════════════════════════════
   async function fetchRegsGov(endpoint, params = {}) {
     const url = new URL(`https://api.regulations.gov/v4/${endpoint}`);
-    for (const [k, v] of Object.entries(params)) {
-      url.searchParams.set(k, v);
-    }
+    for (const [k,v] of Object.entries(params)) url.searchParams.set(k, v);
     url.searchParams.set('api_key', API_KEY);
     const resp = await fetch(url.toString());
     if (resp.status === 429) throw new Error('Rate limited — try adding your own API key');
@@ -931,80 +764,114 @@
     return await resp.json();
   }
 
-  // ── RENDER: FEDERAL REGISTER ──
+  async function fetchEnvRegsDocs() {
+    const threeDaysAgo = new Date(Date.now() - 3*86400000).toISOString().split('T')[0];
+
+    const [epaData, envData] = await Promise.allSettled([
+      fetchRegsGov('documents', {
+        'filter[agencyId]': 'EPA',
+        sort: '-postedDate',
+        'page[size]': '20',
+        'filter[postedDate][ge]': threeDaysAgo
+      }),
+      fetchRegsGov('documents', {
+        'filter[searchTerm]': 'environmental protection pollution emissions water',
+        sort: '-postedDate',
+        'page[size]': '10',
+        'filter[postedDate][ge]': threeDaysAgo
+      })
+    ]);
+
+    // Merge + deduplicate
+    const allDocs = [];
+    const seen = new Set();
+    for (const r of [epaData, envData]) {
+      if (r.status === 'fulfilled' && r.value.data) {
+        for (const doc of r.value.data) {
+          if (!seen.has(doc.id)) { seen.add(doc.id); allDocs.push(doc); }
+        }
+      }
+    }
+    allDocs.sort((a,b) => new Date(b.attributes.postedDate) - new Date(a.attributes.postedDate));
+    return { data: allDocs.slice(0,25), meta: epaData.status==='fulfilled' ? epaData.value.meta : null };
+  }
+
+  async function fetchEnvRegsComments() {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    return await fetchRegsGov('comments', {
+      'filter[agencyId]': 'EPA',
+      sort: '-postedDate',
+      'page[size]': '25',
+      'filter[postedDate][ge]': yesterday
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════
+  // RENDERERS
+  // ═══════════════════════════════════════════════════════
   function renderFRFeed(data, elId) {
     const el = document.getElementById(elId);
-    if (!data.results || !data.results.length) { isEmpty(elId); return; }
-
-    el.innerHTML = data.results.map(doc => {
-      const isNew = false; // FR doesn't have live "new" detection in the same way
-      return `
-        <div class="feed-item${isNew ? ' new' : ''}">
-          <div class="feed-item-top">
-            <div class="feed-item-title">
-              <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
-            </div>
-            <div class="feed-item-time">${fmtDate(doc.publication_date)}</div>
+    if (!data.results || !data.results.length) { setEmpty(elId); return; }
+    el.innerHTML = data.results.map(doc => `
+      <div class="feed-item">
+        <div class="feed-item-top">
+          <div class="feed-item-title">
+            <a href="${esc(doc.html_url)}" target="_blank" rel="noopener">${esc(doc.title)}</a>
           </div>
-          <div class="feed-item-meta">
-            ${frTypeTag(doc.type)}
-            ${doc.agencies && doc.agencies.length ? doc.agencies.slice(0,2).map(a => `<span class="tag agency">${escHtml(a.short_name || a.name || '').substring(0,20)}</span>`).join('') : ''}
-            ${doc.document_number ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(doc.document_number)}</span>` : ''}
-          </div>
-        </div>`;
-    }).join('');
+          <div class="feed-item-time">${fmtDate(doc.publication_date)}</div>
+        </div>
+        <div class="feed-item-meta">
+          ${frTypeTag(doc.type)}
+          ${(doc.agencies||[]).slice(0,2).map(a => agencyTag(a.short_name||a.name||'')).join('')}
+          ${doc.document_number ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${esc(doc.document_number)}</span>` : ''}
+        </div>
+      </div>`).join('');
   }
 
   function renderClosingSoon(data) {
     const el = document.getElementById('feedClosingSoon');
-    if (!data.results || !data.results.length) { isEmpty('feedClosingSoon'); return; }
-
+    if (!data.results || !data.results.length) { setEmpty('feedClosingSoon'); return; }
     el.innerHTML = data.results.map(doc => {
-      const daysLeft = doc.comment_end_on
-        ? Math.max(0, Math.ceil((new Date(doc.comment_end_on) - new Date()) / 86400000))
-        : null;
-      const urgency = daysLeft !== null && daysLeft <= 2 ? 'color:var(--accent-red);font-weight:600;' : '';
+      const dl = doc.comment_end_on ? Math.max(0, Math.ceil((new Date(doc.comment_end_on)-new Date())/86400000)) : null;
+      const urg = dl!==null && dl<=2 ? 'color:var(--accent-red);font-weight:600;' : '';
       return `
         <div class="feed-item">
           <div class="feed-item-top">
             <div class="feed-item-title">
-              <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
+              <a href="${esc(doc.html_url)}" target="_blank" rel="noopener">${esc(doc.title)}</a>
             </div>
-            <div class="feed-item-time" style="${urgency}">
-              ${daysLeft !== null ? (daysLeft === 0 ? 'CLOSES TODAY' : daysLeft + 'd left') : '—'}
+            <div class="feed-item-time" style="${urg}">
+              ${dl!==null ? (dl===0 ? 'CLOSES TODAY' : dl+'d left') : '—'}
             </div>
           </div>
           <div class="feed-item-meta">
             ${frTypeTag(doc.type)}
-            ${doc.agencies && doc.agencies.length ? `<span class="tag agency">${escHtml((doc.agencies[0].short_name || doc.agencies[0].name || '').substring(0,20))}</span>` : ''}
+            ${(doc.agencies||[]).length ? agencyTag((doc.agencies[0].short_name||doc.agencies[0].name||'').substring(0,20)) : ''}
             ${doc.comment_end_on ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">Closes ${fmtDateShort(doc.comment_end_on)}</span>` : ''}
           </div>
         </div>`;
     }).join('');
   }
 
-  // ── RENDER: REGULATIONS.GOV ──
   function renderRegsDocs(data) {
     const el = document.getElementById('feedRegDocs');
-    if (!data.data || !data.data.length) { isEmpty('feedRegDocs'); return; }
-
+    if (!data.data || !data.data.length) { setEmpty('feedRegDocs'); return; }
     el.innerHTML = data.data.map(doc => {
       const a = doc.attributes;
       const isNew = !isFirstLoad && !knownDocIds.has(doc.id);
       knownDocIds.add(doc.id);
-      const regUrl = `https://www.regulations.gov/document/${doc.id}`;
       return `
-        <div class="feed-item${isNew ? ' new' : ''}">
+        <div class="feed-item${isNew?' new':''}">
           <div class="feed-item-top">
             <div class="feed-item-title">
-              <a href="${regUrl}" target="_blank" rel="noopener">${escHtml(a.title)}</a>
+              <a href="https://www.regulations.gov/document/${doc.id}" target="_blank" rel="noopener">${esc(a.title)}</a>
             </div>
             <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
           </div>
           <div class="feed-item-meta">
             ${docTypeTag(a.documentType)}
-            <span class="tag agency">${escHtml(a.agencyId || '')}</span>
-            <span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(doc.id)}</span>
+            ${agencyTag(a.agencyId)}
+            <span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${esc(doc.id)}</span>
           </div>
         </div>`;
     }).join('');
@@ -1012,78 +879,77 @@
 
   function renderRegsComments(data) {
     const el = document.getElementById('feedRegComments');
-    if (!data.data || !data.data.length) { isEmpty('feedRegComments'); return; }
-
+    if (!data.data || !data.data.length) { setEmpty('feedRegComments'); return; }
     el.innerHTML = data.data.map(doc => {
       const a = doc.attributes;
       const isNew = !isFirstLoad && !knownCommentIds.has(doc.id);
       knownCommentIds.add(doc.id);
-      const regUrl = `https://www.regulations.gov/comment/${doc.id}`;
       return `
-        <div class="feed-item${isNew ? ' new' : ''}">
+        <div class="feed-item${isNew?' new':''}">
           <div class="feed-item-top">
             <div class="feed-item-title">
-              <a href="${regUrl}" target="_blank" rel="noopener">${escHtml(a.title || doc.id)}</a>
+              <a href="https://www.regulations.gov/comment/${doc.id}" target="_blank" rel="noopener">${esc(a.title||doc.id)}</a>
             </div>
             <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
           </div>
           <div class="feed-item-meta">
             <span class="tag comment">Comment</span>
-            <span class="tag agency">${escHtml(a.agencyId || '')}</span>
-            ${a.organization ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${escHtml(a.organization.substring(0,40))}</span>` : ''}
+            ${agencyTag(a.agencyId)}
+            ${a.organization ? `<span style="font-family:var(--mono);font-size:10px;color:var(--text-tertiary);">${esc(a.organization.substring(0,40))}</span>` : ''}
           </div>
         </div>`;
     }).join('');
   }
 
-  // ── SEARCH ──
+  // ═══════════════════════════════════════════════════════
+  // SEARCH (scoped to environmental agencies)
+  // ═══════════════════════════════════════════════════════
   async function doSearch(term) {
     const panel = $('#searchResultsPanel');
     panel.style.display = '';
     setLoading('feedSearch');
-    $('#searchResultsMeta').textContent = `Searching for "${term}"...`;
+    $('#searchResultsMeta').textContent = `Searching environmental regulations for "${term}"...`;
 
     try {
-      // Search both APIs in parallel
       const [frData, regsData] = await Promise.allSettled([
-        fetch(`https://www.federalregister.gov/api/v1/documents.json?per_page=15&order=relevance&conditions[term]=${encodeURIComponent(term)}`).then(r => r.json()),
-        fetchRegsGov('documents', { 'filter[searchTerm]': term, 'page[size]': '15', sort: '-postedDate' })
+        fetch(`https://www.federalregister.gov/api/v1/documents.json?per_page=15&order=relevance&conditions[term]=${encodeURIComponent(term)}&${buildFRAgencyParams()}`).then(r=>r.json()),
+        fetchRegsGov('documents', {
+          'filter[searchTerm]': term,
+          'filter[agencyId]': 'EPA',
+          'page[size]': '15',
+          sort: '-postedDate'
+        })
       ]);
 
       let html = '';
       let total = 0;
 
-      // FR results
-      if (frData.status === 'fulfilled' && frData.value.results) {
-        const filtered = activeFilter === 'all'
-          ? frData.value.results
-          : frData.value.results.filter(d => {
-              const typeMap = { 'Rule': 'RULE', 'Proposed Rule': 'PRORULE', 'Notice': 'NOTICE', 'Presidential Document': 'PRESDOCU' };
-              return d.type === Object.entries(typeMap).find(([k,v]) => k === activeFilter)?.[1]
-                || d.type === activeFilter;
-            });
+      if (frData.status==='fulfilled' && frData.value.results) {
+        const filtered = activeFilter==='all' ? frData.value.results :
+          frData.value.results.filter(d => {
+            const m = {'Rule':'RULE','Proposed Rule':'PRORULE','Notice':'NOTICE'};
+            return d.type===Object.entries(m).find(([k])=>k===activeFilter)?.[1] || d.type===activeFilter;
+          });
         total += filtered.length;
         html += filtered.map(doc => `
           <div class="feed-item">
             <div class="feed-item-top">
               <div class="feed-item-title">
-                <a href="${escHtml(doc.html_url)}" target="_blank" rel="noopener">${escHtml(doc.title)}</a>
+                <a href="${esc(doc.html_url)}" target="_blank" rel="noopener">${esc(doc.title)}</a>
               </div>
               <div class="feed-item-time">${fmtDate(doc.publication_date)}</div>
             </div>
             <div class="feed-item-meta">
               ${frTypeTag(doc.type)}
               <span class="tag agency">Federal Register</span>
-              ${doc.agencies && doc.agencies.length ? `<span class="tag agency">${escHtml((doc.agencies[0].short_name || doc.agencies[0].name || '').substring(0,20))}</span>` : ''}
+              ${(doc.agencies||[]).length ? agencyTag((doc.agencies[0].short_name||doc.agencies[0].name||'').substring(0,20)) : ''}
             </div>
           </div>`).join('');
       }
 
-      // Regs.gov results
-      if (regsData.status === 'fulfilled' && regsData.value.data) {
-        const filtered = activeFilter === 'all'
-          ? regsData.value.data
-          : regsData.value.data.filter(d => d.attributes.documentType === activeFilter);
+      if (regsData.status==='fulfilled' && regsData.value.data) {
+        const filtered = activeFilter==='all' ? regsData.value.data :
+          regsData.value.data.filter(d => d.attributes.documentType===activeFilter);
         total += filtered.length;
         html += filtered.map(doc => {
           const a = doc.attributes;
@@ -1091,192 +957,116 @@
             <div class="feed-item">
               <div class="feed-item-top">
                 <div class="feed-item-title">
-                  <a href="https://www.regulations.gov/document/${doc.id}" target="_blank" rel="noopener">${escHtml(a.title)}</a>
+                  <a href="https://www.regulations.gov/document/${doc.id}" target="_blank" rel="noopener">${esc(a.title)}</a>
                 </div>
                 <div class="feed-item-time">${fmtDate(a.postedDate)}</div>
               </div>
               <div class="feed-item-meta">
                 ${docTypeTag(a.documentType)}
                 <span class="tag agency">Regulations.gov</span>
-                <span class="tag agency">${escHtml(a.agencyId || '')}</span>
+                ${agencyTag(a.agencyId)}
               </div>
             </div>`;
         }).join('');
       }
 
-      $('#searchResultsMeta').textContent = `${total} results for "${term}"`;
+      $('#searchResultsMeta').textContent = `${total} environmental results for "${term}"`;
       $('#feedSearch').innerHTML = html || '<div class="empty-state">No results found</div>';
     } catch (e) {
       setError('feedSearch', 'Search failed: ' + e.message);
     }
   }
 
-  // ── UPDATE TICKER ──
-  function updateTicker(frData) {
-    if (!frData || !frData.results || !frData.results.length) return;
-    const items = frData.results.slice(0, 8);
-    const tickerHtml = items.map(d => {
-      const agency = d.agencies && d.agencies[0] ? (d.agencies[0].short_name || d.agencies[0].name) : '';
-      return `<span>${agency ? agency + ': ' : ''}${(d.title || '').substring(0, 100)}</span>`;
-    }).join('');
-    // Duplicate for seamless loop
-    $('#ticker').innerHTML = tickerHtml + tickerHtml;
-  }
-
-  // ── MAIN FETCH ──
+  // ═══════════════════════════════════════════════════════
+  // MAIN FETCH LOOP
+  // ═══════════════════════════════════════════════════════
   async function fetchAll() {
     const btn = $('#refreshBtn');
     btn.classList.add('spinning');
     setStatus('loading', 'Fetching...');
-
     let errors = 0;
-    let frData = null;
 
-    // Federal Register (always works, no key)
     try {
-      frData = await fetchFederalRegister();
+      const frData = await fetchFederalRegister();
       renderFRFeed(frData, 'feedFR');
-      updateTicker(frData);
-      const todayCount = frData.results ? frData.results.filter(d => {
-        const pub = new Date(d.publication_date).toDateString();
-        return pub === new Date().toDateString();
-      }).length : 0;
-      $('#statFRDocs').innerHTML = todayCount.toLocaleString();
+      $('#statFRDocs').innerHTML = (frData.results ? frData.results.length : 0).toLocaleString();
       const agencies = new Set();
-      if (frData.results) frData.results.forEach(d => {
-        if (d.agencies) d.agencies.forEach(a => agencies.add(a.short_name || a.name));
-      });
+      (frData.results||[]).forEach(d => (d.agencies||[]).forEach(a => agencies.add(a.short_name||a.name)));
       $('#statAgencies').innerHTML = agencies.size.toString();
-    } catch (e) {
-      errors++;
-      setError('feedFR', 'Failed to load Federal Register data');
-    }
+    } catch (e) { errors++; setError('feedFR', 'Failed to load Federal Register data'); }
 
-    // FR: Open for Comment
     try {
       const openData = await fetchFROpenComment();
       renderClosingSoon(openData);
       $('#statOpenComment').innerHTML = openData.count ? openData.count.toLocaleString() : (openData.results ? openData.results.length.toString() : '—');
-    } catch (e) {
-      errors++;
-      setError('feedClosingSoon', 'Failed to load');
-    }
+    } catch (e) { errors++; setError('feedClosingSoon', 'Failed to load'); }
 
-    // Regulations.gov Documents
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const threeDaysAgo = new Date(Date.now() - 3 * 86400000).toISOString().split('T')[0];
-      const regsData = await fetchRegsGov('documents', {
-        sort: '-postedDate',
-        'page[size]': '25',
-        'filter[postedDate][ge]': threeDaysAgo
-      });
+      const regsData = await fetchEnvRegsDocs();
       renderRegsDocs(regsData);
-    } catch (e) {
-      errors++;
-      setError('feedRegDocs', e.message.includes('Rate limited') ? 'Rate limited — add your own API key' : 'Failed: ' + e.message);
-    }
+    } catch (e) { errors++; setError('feedRegDocs', e.message.includes('Rate') ? 'Rate limited — add your API key' : 'Failed: '+e.message); }
 
-    // Regulations.gov Comments
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      const commData = await fetchRegsGov('comments', {
-        sort: '-postedDate',
-        'page[size]': '25',
-        'filter[postedDate][ge]': yesterday
-      });
+      const commData = await fetchEnvRegsComments();
       renderRegsComments(commData);
-      const totalComments = commData.meta ? commData.meta.totalElements : (commData.data ? commData.data.length : 0);
-      $('#statComments').innerHTML = totalComments ? totalComments.toLocaleString() : '—';
-    } catch (e) {
-      errors++;
-      setError('feedRegComments', e.message.includes('Rate limited') ? 'Rate limited — add your own API key' : 'Failed: ' + e.message);
-    }
+      const t = commData.meta ? commData.meta.totalElements : (commData.data ? commData.data.length : 0);
+      $('#statComments').innerHTML = t ? t.toLocaleString() : '—';
+    } catch (e) { errors++; setError('feedRegComments', e.message.includes('Rate') ? 'Rate limited — add your API key' : 'Failed: '+e.message); }
 
-    // Status
     const now = new Date();
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    $('#statTime').textContent = timeStr;
+    const ts = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    $('#statTime').textContent = ts;
     $('#footerTimestamp').textContent = 'Last fetch: ' + now.toLocaleString();
 
-    if (errors === 0) setStatus('ok', 'Live — ' + timeStr);
-    else if (errors < 4) setStatus('loading', 'Partial — ' + errors + ' error(s)');
+    if (errors===0) setStatus('ok', 'Live — '+ts);
+    else if (errors<4) setStatus('loading', 'Partial — '+errors+' error(s)');
     else setStatus('error', 'Errors — check API key');
 
     isFirstLoad = false;
     btn.classList.remove('spinning');
   }
 
-  // ── INTERVAL MANAGEMENT ──
   function startInterval() {
     if (refreshInterval) clearInterval(refreshInterval);
     const ms = parseInt($('#intervalSelect').value);
-    if (ms > 0) {
-      refreshInterval = setInterval(fetchAll, ms);
-    }
+    if (ms > 0) refreshInterval = setInterval(fetchAll, ms);
   }
 
-  // ── EVENT HANDLERS ──
+  // ═══════════════════════════════════════════════════════
+  // EVENT HANDLERS
+  // ═══════════════════════════════════════════════════════
   $('#intervalSelect').addEventListener('change', startInterval);
-
   $('#refreshBtn').addEventListener('click', fetchAll);
-
   $('#apiKeyBtn').addEventListener('click', () => {
-    $('#apiKeyInput').value = API_KEY === 'DEMO_KEY' ? '' : API_KEY;
+    $('#apiKeyInput').value = API_KEY==='DEMO_KEY' ? '' : API_KEY;
     $('#apiKeyModal').classList.add('visible');
   });
-
-  $('#modalCancel').addEventListener('click', () => {
-    $('#apiKeyModal').classList.remove('visible');
-  });
-
+  $('#modalCancel').addEventListener('click', () => $('#apiKeyModal').classList.remove('visible'));
   $('#modalSave').addEventListener('click', () => {
-    const key = $('#apiKeyInput').value.trim();
-    API_KEY = key || 'DEMO_KEY';
+    API_KEY = $('#apiKeyInput').value.trim() || 'DEMO_KEY';
     localStorage.setItem('regs_api_key', API_KEY);
     $('#apiKeyModal').classList.remove('visible');
     fetchAll();
   });
-
-  $('#apiKeyModal').addEventListener('click', (e) => {
-    if (e.target === $('#apiKeyModal')) $('#apiKeyModal').classList.remove('visible');
-  });
-
-  $('#searchBtn').addEventListener('click', () => {
-    const term = $('#searchInput').value.trim();
-    if (term) doSearch(term);
-  });
-
-  $('#searchInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const term = $('#searchInput').value.trim();
-      if (term) doSearch(term);
-    }
-  });
-
-  $('#closeSearchBtn').addEventListener('click', () => {
-    $('#searchResultsPanel').style.display = 'none';
-  });
-
-  // Filter chips
+  $('#apiKeyModal').addEventListener('click', e => { if (e.target===$('#apiKeyModal')) $('#apiKeyModal').classList.remove('visible'); });
+  $('#searchBtn').addEventListener('click', () => { const t=$('#searchInput').value.trim(); if(t) doSearch(t); });
+  $('#searchInput').addEventListener('keydown', e => { if(e.key==='Enter'){const t=$('#searchInput').value.trim(); if(t) doSearch(t);} });
+  $('#closeSearchBtn').addEventListener('click', () => { $('#searchResultsPanel').style.display='none'; });
   $$('.filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       $$('.filter-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       activeFilter = chip.dataset.filter;
-      // Re-run search if search panel is open
-      const term = $('#searchInput').value.trim();
-      if (term && $('#searchResultsPanel').style.display !== 'none') {
-        doSearch(term);
-      }
+      const t = $('#searchInput').value.trim();
+      if (t && $('#searchResultsPanel').style.display!=='none') doSearch(t);
     });
   });
 
-  // ── INIT ──
+  // ═══════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════
   fetchAll();
   startInterval();
-
 })();
 </script>
 </body>
